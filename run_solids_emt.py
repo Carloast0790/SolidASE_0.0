@@ -1,0 +1,44 @@
+input_text = """
+---COMPOSITION---
+Au 2
+Ag 2
+---COMPOSITION---
+formula_units       2
+dimension           3
+number_of_xtals     5
+#symmetries          16-74
+#fixed_lattice       2.474 8.121 6.138 90.0 90.0 90.0
+#custom_tolerances   Ti,Ti,1.2 Ti,O,1.3 O,O,1.2
+#---TOLERANCES---
+#Au Au 1.2
+#Ag Ag 1.3
+#Au Ag 1.2
+#---TOLERANCES---
+volume_factor           1.0
+tol_atomic_overlap      0.95
+
+#EVOLUTIVE PARAMETERS:
+nof_initpop             15    #Initial Population
+nof_matings             10    #Number of matings
+nof_strains             5
+nof_xchange             2
+
+#NICHING PARAMETERS:
+tol_similarity          0.95 #Tol for similarity
+cutoff_energy           10.0  #Energy Cut-off
+cutoff_population       8    #Max population size
+
+#HALT CRITERION:
+nof_generations         5    #Max generations
+nof_repeats             3    #Max repeated isomers
+nof_stagnant            3    #Max stagnant cycles
+
+#THEORY LEVEL:
+calculator              EMT
+nof_processes           1    #Number of parallel local opts
+"""
+inputfile = 'INPUT.txt'
+with open(inputfile, "w") as f: f.write(input_text)
+if __name__ == "__main__":
+    from solids.heuristic  import genetic_algorithm
+    xopt_sort=genetic_algorithm(inputfile)
