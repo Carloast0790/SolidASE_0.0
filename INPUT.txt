@@ -1,4 +1,4 @@
-input_text = """
+
 ---COMPOSITION---
 Ti 1
 O  2
@@ -55,9 +55,3 @@ Ti Ti   1   0 15
 O  O    1   0 15
 Ti O    1   0 15
 ---GULP---
-"""
-inputfile = 'INPUT.txt'
-with open(inputfile, "w") as f: f.write(input_text)
-if __name__ == "__main__":
-    from solids.heuristic  import genetic_algorithm
-    xopt_sort=genetic_algorithm(inputfile)

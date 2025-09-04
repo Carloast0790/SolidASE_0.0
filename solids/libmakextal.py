@@ -131,7 +131,7 @@ def random_crystal_generator(file):
     vol_factor = df.get_float('volume_factor',1.0)
     revisit_syms = df.get_int('revisit_syms',1)
     tol_atomic_overlap = df.get_float('tol_atomic_overlap',0.97)
-    number_of_xtals = df.get_int('number_of_xtals',False)
+    number_of_xtals = df.get_int('nof_initpop',False)
     sym_list = get_symmetry_constrains(file,'symmetries', dimension)
     uc_rest = uc_restriction_pyxtal(file)
     pyxtal_mtx_tolerance = interatom_restriction_pyxtal(file)
