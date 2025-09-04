@@ -3,7 +3,7 @@ from aegon.libutils import sort_by_energy, cutter_energy, rename
 from aegon.libposcar import writeposcars
 from aegon.libstdio import read_main_input
 from aegon.libroulette import get_roulette_wheel_selection
-from solids.libdiscmbtrcrystals import comparator_mbtr_conv, descriptor_comparison_calculated, descriptor_comparison_calculated_vs_pool
+from solids.libdiscmbtrcrystals import descriptor_comparison_calculated, descriptor_comparison_calculated_vs_pool
 from solids.libtools import display_mol_info
 from solids.libmakextal import random_crystal_generator
 from solids.libcrossover import crossover
@@ -77,9 +77,9 @@ def genetic_algorithm(inputfile='INPUT.txt'):
     xopt=cutter_energy(xopt, cutoff_energy)
     xopt_sort=sort_by_energy(xopt, 1)
     xopt_sort = descriptor_comparison_calculated(xopt_sort, tol_similarity)
-    # write('gen0_disc.vasp', xopt_sort[0], format='vasp')
+    ## write('gen0_disc.vasp', xopt_sort[0], format='vasp')
     xopt_sort = xopt_sort[:cutoff_population]
-    # write('gen0_optimized.vasp', xopt_sort[0], format='vasp')
+    ## write('gen0_optimized.vasp', xopt_sort[0], format='vasp')
     print('\n---------------------------GLOBAL SUMMARY---------------------------')
     display_mol_info(xopt_sort)
     namesi=[imol.info['i'] for imol in xopt_sort][:nof_repeats]
@@ -99,7 +99,7 @@ def genetic_algorithm(inputfile='INPUT.txt'):
                 print('mating_'+str(igen+1).zfill(4)+'_'+str(i+1).zfill(4)+' ---> '+list_p[i].info['i']+'_x_'+list_m[i].info['i'])
                 atoms_list_out.extend([cross])
         rename(atoms_list_out, 'mating_'+str(igen+1).zfill(ndigit1), ndigit2)
-        # write('mating_'+str(igen+1).zfill(ndigit1)+'.vasp', atoms_list_out[0], format='vasp')
+        ## write('mating_'+str(igen+1).zfill(ndigit1)+'.vasp', atoms_list_out[0], format='vasp')
         print('\nConstruction of mutants ...\n')
         list_x=get_roulette_wheel_selection(xopt_sort, nof_strains+nof_xchange)
         strain_atoms, exchange_atoms = make_mutants(list_x, nof_strains, nof_xchange,igen=igen)
