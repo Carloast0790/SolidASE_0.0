@@ -57,13 +57,12 @@ def genetic_algorithm(inputfile='INPUT.txt'):
     print('Construction of the guest population (nof_initpop=%d)\n' %(nof_initpop))
     xrand = random_crystal_generator(inputfile)
     # write('random_crystal1.vasp', xrand[0], format='vasp')
-    print('written random_crystal1.vasp\n')
     rename(xrand, 'random_'+str(0).zfill(ndigit1), ndigit2)
-    print('Optimization at %s:' %(calculator))
+    print('\nOptimization at %s:' %(calculator))
 
     if calculator=='EMT':
-        cd=code(xrand)
-        xopt=cd.set_EMT()
+        cd = code(xrand)
+        xopt = cd.set_EMT()
     elif calculator=='GULP':
         cd=code(xrand)
         block_gulp=df.get_block(key='GULP')
@@ -72,10 +71,10 @@ def genetic_algorithm(inputfile='INPUT.txt'):
         os.system('rm -rf stageproc*')
 
     print()
-    print('--------------- Duplicates Removal in Generation ------------------')
-    print('Max population size=%d; Energy Cut-off=%.2f; Tolerance for similarity=%4.2f' %(cutoff_population,cutoff_energy,tol_similarity))
-    xopt=cutter_energy(xopt, cutoff_energy)
-    xopt_sort=sort_by_energy(xopt, 1)
+    print('--------------- Niching Candidates in Generation ------------------')
+    print('Max population size=%d; Energy Cut-off=%.2f; Tolerance for similarity=%4.2f\n' %(cutoff_population,cutoff_energy,tol_similarity))
+    xopt = cutter_energy(xopt, cutoff_energy)
+    xopt_sort = sort_by_energy(xopt, 1)
     xopt_sort = descriptor_comparison_calculated(xopt_sort, tol_similarity)
     ## write('gen0_disc.vasp', xopt_sort[0], format='vasp')
     xopt_sort = xopt_sort[:cutoff_population]
@@ -89,32 +88,32 @@ def genetic_algorithm(inputfile='INPUT.txt'):
         print('Construction of crossovers ...\n')
         list_p=get_roulette_wheel_selection(xopt_sort, nof_matings)
         list_m=get_roulette_wheel_selection(xopt_sort, nof_matings)
-        atoms_list_out=[]
+        cross_atoms = []
         for i in range(nof_matings):
             atomsA, atomsB = random.choice(list_p), random.choice(list_m)
-            if atomsA.info['i'] == atomsB.info['i']:
+            while atomsA.info['i'] == atomsB.info['i']:
                 atomsB = random.choice(list_m)
             cross = crossover(atomsA, atomsB)
             if cross:
                 print('mating_'+str(igen+1).zfill(4)+'_'+str(i+1).zfill(4)+' ---> '+list_p[i].info['i']+'_x_'+list_m[i].info['i'])
-                atoms_list_out.extend([cross])
-        rename(atoms_list_out, 'mating_'+str(igen+1).zfill(ndigit1), ndigit2)
-        ## write('mating_'+str(igen+1).zfill(ndigit1)+'.vasp', atoms_list_out[0], format='vasp')
+                cross_atoms.extend([cross])
+        rename(cross_atoms, 'mating_'+str(igen+1).zfill(ndigit1), ndigit2)
+        ## write('mating_'+str(igen+1).zfill(ndigit1)+'.vasp', cross_atoms[0], format='vasp')
         print('\nConstruction of mutants ...\n')
-        list_x=get_roulette_wheel_selection(xopt_sort, nof_strains+nof_xchange)
+        list_x = get_roulette_wheel_selection(xopt_sort, nof_strains+nof_xchange)
         strain_atoms, exchange_atoms = make_mutants(list_x, nof_strains, nof_xchange,igen=igen)
         rename(strain_atoms, 'mutant_'+str(igen+1).zfill(ndigit1), ndigit2)
         rename(exchange_atoms, 'mutant_'+str(igen+1).zfill(ndigit1), ndigit2)
         # write('strained_'+str(igen+1).zfill(ndigit1)+'.vasp', strain_atoms[0], format='vasp')
         # write('exchanged_'+str(igen+1).zfill(ndigit1)+'.vasp', exchange_atoms[0], format='vasp')
-        atoms_list_mut = strain_atoms + exchange_atoms
-        print('\nOptimization at %s:' %(calculator))
+        atomsGen = cross_atoms + strain_atoms + exchange_atoms
 
+        print('\nOptimization at %s:' %(calculator))
         if calculator=='EMT':
-            cd=code(atoms_list_out+atoms_list_mut)
+            cd=code(atomsGen)
             generation_opt=cd.set_EMT()
         elif calculator=='GULP':
-            cd=code(xrand)
+            cd=code(atomsGen)
             block_gulp=df.get_block(key='GULP')
             path_exe=df.get_str(key='path_exe', default=None)
             generation_opt=cd.set_GULP(block_gulp=block_gulp, gulp_path=path_exe, nproc=nof_processes, base_name='stage')

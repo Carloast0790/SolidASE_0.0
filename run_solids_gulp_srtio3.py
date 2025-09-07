@@ -4,11 +4,10 @@ Sr   1
 Ti   1
 O    3
 ---COMPOSITION---
-formula_units           10
+formula_units           4
 dimension               3
-number_of_xtals         5
-#symmetries             16-74
-#fixed_lattice          2.474 8.121 6.138 90.0 90.0 90.0
+symmetries             16-74
+fixed_lattice          2.474 8.121 6.138 90.0 90.0 90.0
 #custom_tolerances      Ti,Ti,1.2 Ti,O,1.3 O,O,1.2
 #---TOLERANCES---
 #Au Au 1.2
@@ -37,7 +36,7 @@ nof_stagnant            5     #Max stagnant cycles
 #THEORY LEVEL:
 nof_processes           10    #Number of parallel local opts
 calculator              GULP
-path_exe                /Users/fortiz/installdir/bin/gulp
+path_exe                /home/carlos0790/installdir/bin/gulp
 ---GULP---
 opti conjugate nosymmetry conp
 switch_minimiser bfgs gnorm 0.01
@@ -56,8 +55,8 @@ Sr Sr 1.0 0.0 0. 6.0
 Sr Ti 1.0 0.0 0. 6.0
 Sr O  2.0 0.0 0. 6.0
 Ti Ti 1.0 0.0 0. 6.0
-Ti O  2.0 0.0 0. 6.0 
-O  O  2.0 0.0 0. 6.0 
+Ti O  2.0 0.0 0. 6.0
+O  O  2.0 0.0 0. 6.0
 buck
 Sr Sr 9949.1  0.2446 0.0 0. 8.0
 Sr Ti 12708.1 0.2191 0.0 0. 8.0

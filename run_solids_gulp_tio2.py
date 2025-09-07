@@ -28,7 +28,7 @@ cutoff_energy           10.0  #Energy Cut-off
 cutoff_population       8    #Max population size
 
 #HALT CRITERION:
-nof_generations         5    #Max generations
+nof_generations         2    #Max generations
 nof_repeats             3    #Max repeated isomers
 nof_stagnant            3    #Max stagnant cycles
 

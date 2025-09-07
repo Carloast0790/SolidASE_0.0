@@ -41,7 +41,7 @@ def descriptor_comparison_calculated(atoms_list_in, tolerance, nproc=2):
             dot_product = np.dot(descriptors[i], descriptors[j])
             similarity = dot_product / (norm_i * norm_j)
             if similarity >= tolerance:
-                print(f"{atoms_list_in[j].info['i']} removed, too similar to {atoms_list_in[i].info['i']}, similarity = {similarity:.5f}")
+                print(f"{atoms_list_in[i].info['i']} removed, too similar to {atoms_list_in[j].info['i']}, similarity = {similarity:.5f}")
                 disc_count += 1
                 stop_flag = True
                 break
