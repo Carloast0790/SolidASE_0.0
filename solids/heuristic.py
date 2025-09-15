@@ -55,44 +55,45 @@ def genetic_algorithm(inputfile='INPUT.txt'):
     #Main Algorithm
     print('---------------------------GENERATION 0---------------------------')
     print('Construction of the guest population (nof_initpop=%d)\n' %(nof_initpop))
-    xrand = random_crystal_generator(inputfile)
-    # write('random_crystal1.vasp', xrand[0], format='vasp')
-    rename(xrand, 'random_'+str(0).zfill(ndigit1), ndigit2)
+    gen0Rand = random_crystal_generator(inputfile)
+    rename(gen0Rand, 'random_'+str(0).zfill(ndigit1), ndigit2)
     print('\nOptimization at %s:' %(calculator))
 
     if calculator=='EMT':
-        cd = code(xrand)
-        xopt = cd.set_EMT()
+        cd = code(gen0Rand)
+        gen0Opt = cd.set_EMT()
     elif calculator=='GULP':
-        cd=code(xrand)
-        block_gulp=df.get_block(key='GULP')
-        path_exe=df.get_str(key='path_exe', default=None)
-        xopt=cd.set_GULP(block_gulp=block_gulp, gulp_path=path_exe, nproc=nof_processes, base_name='stage')
+        cd=code(gen0Rand)
+        block_gulp = df.get_block(key='GULP')
+        path_exe = df.get_str(key='path_exe', default=None)
+        gen0Opt = cd.set_GULP(block_gulp=block_gulp, gulp_path=path_exe, nproc=nof_processes, base_name='stage')
         os.system('rm -rf stageproc*')
 
     print()
-    print('--------------- Niching Candidates in Generation ------------------')
+    print('---------------------------Niching---------------------------\n')
     print('Max population size=%d; Energy Cut-off=%.2f; Tolerance for similarity=%4.2f\n' %(cutoff_population,cutoff_energy,tol_similarity))
-    xopt = cutter_energy(xopt, cutoff_energy)
-    xopt_sort = sort_by_energy(xopt, 1)
-    xopt_sort = descriptor_comparison_calculated(xopt_sort, tol_similarity)
-    ## write('gen0_disc.vasp', xopt_sort[0], format='vasp')
-    xopt_sort = xopt_sort[:cutoff_population]
-    ## write('gen0_optimized.vasp', xopt_sort[0], format='vasp')
-    print('\n---------------------------GLOBAL SUMMARY---------------------------')
-    display_mol_info(xopt_sort)
-    namesi=[imol.info['i'] for imol in xopt_sort][:nof_repeats]
+    gen0Cut = cutter_energy(gen0Opt, cutoff_energy)
+    gen0CutSort = sort_by_energy(gen0Cut, 1)
+    gen0Nich = descriptor_comparison_calculated(gen0CutSort, tol_similarity)
+    genClean = gen0Nich[:cutoff_population]
+    print('\n---------------------------GLOBAL SUMMARY---------------------------\n')
+    display_mol_info(genClean)
+    namesi=[imol.info['i'] for imol in genClean][:nof_repeats]
     count=0
     for igen in range(nof_generations):
-        print("\n---------------------------GENERATION %d---------------------------" %(igen+1))
+        print("\n---------------------------GENERATION %d---------------------------\n" %(igen+1))
         print('Construction of crossovers ...\n')
-        list_p=get_roulette_wheel_selection(xopt_sort, nof_matings)
-        list_m=get_roulette_wheel_selection(xopt_sort, nof_matings)
+        list_p=get_roulette_wheel_selection(genClean, nof_matings)
+        list_m=get_roulette_wheel_selection(genClean, nof_matings)
         cross_atoms = []
         for i in range(nof_matings):
             atomsA, atomsB = random.choice(list_p), random.choice(list_m)
+            lock = 0
             while atomsA.info['i'] == atomsB.info['i']:
                 atomsB = random.choice(list_m)
+                lock += 1
+                if lock > 10:
+                    break
             cross = crossover(atomsA, atomsB)
             if cross:
                 print('mating_'+str(igen+1).zfill(4)+'_'+str(i+1).zfill(4)+' ---> '+list_p[i].info['i']+'_x_'+list_m[i].info['i'])
@@ -100,41 +101,41 @@ def genetic_algorithm(inputfile='INPUT.txt'):
         rename(cross_atoms, 'mating_'+str(igen+1).zfill(ndigit1), ndigit2)
         ## write('mating_'+str(igen+1).zfill(ndigit1)+'.vasp', cross_atoms[0], format='vasp')
         print('\nConstruction of mutants ...\n')
-        list_x = get_roulette_wheel_selection(xopt_sort, nof_strains+nof_xchange)
+        list_x = get_roulette_wheel_selection(genClean, nof_strains+nof_xchange)
         strain_atoms, exchange_atoms = make_mutants(list_x, nof_strains, nof_xchange,igen=igen)
-        rename(strain_atoms, 'mutant_'+str(igen+1).zfill(ndigit1), ndigit2)
-        rename(exchange_atoms, 'mutant_'+str(igen+1).zfill(ndigit1), ndigit2)
-        # write('strained_'+str(igen+1).zfill(ndigit1)+'.vasp', strain_atoms[0], format='vasp')
-        # write('exchanged_'+str(igen+1).zfill(ndigit1)+'.vasp', exchange_atoms[0], format='vasp')
-        atomsGen = cross_atoms + strain_atoms + exchange_atoms
-
+        allMutants = strain_atoms + exchange_atoms
+        rename(allMutants, 'mutant_'+str(igen+1).zfill(ndigit1), ndigit2)
+        gen_i = cross_atoms + strain_atoms + exchange_atoms
         print('\nOptimization at %s:' %(calculator))
         if calculator=='EMT':
-            cd=code(atomsGen)
-            generation_opt=cd.set_EMT()
+            cd=code(gen_i)
+            gen_iOpt=cd.set_EMT()
         elif calculator=='GULP':
-            cd=code(atomsGen)
+            cd=code(gen_i)
             block_gulp=df.get_block(key='GULP')
             path_exe=df.get_str(key='path_exe', default=None)
-            generation_opt=cd.set_GULP(block_gulp=block_gulp, gulp_path=path_exe, nproc=nof_processes, base_name='stage')
+            gen_iOpt=cd.set_GULP(block_gulp=block_gulp, gulp_path=path_exe, nproc=nof_processes, base_name='stage')
             os.system('rm -rf stageproc*')
-
-        print('\nDiscrimination. Max population size=%d; Energy Cut-off=%.2f; Tol for similarity=%4.2f\n' %(cutoff_population,cutoff_energy,tol_similarity))
-        generation_opt=cutter_energy(generation_opt, cutoff_energy)
-        generation_opt=sort_by_energy(generation_opt,1)
-        generation_opt = descriptor_comparison_calculated_vs_pool(generation_opt, xopt_sort, tol_similarity)
-        xopt_sort=sort_by_energy(xopt_sort+generation_opt, 1)
-        xopt_sort=xopt_sort[:cutoff_population]
-        writeposcars(xopt_sort, 'summary.vasp', pformat)
+        print('\n---------------------------NICHING---------------------------')
+        print('Max population size=%d; Energy Cut-off=%.2f; Tol for similarity=%4.2f\n' %(cutoff_population,cutoff_energy,tol_similarity))
+        gen_iCut = cutter_energy(gen_iOpt, cutoff_energy)
+        gen_iCutSort = sort_by_energy(gen_iCut,1)
+        gen_iNich = descriptor_comparison_calculated(gen_iCutSort, tol_similarity)
+        gen_iClean = descriptor_comparison_calculated_vs_pool(gen_iNich, genClean, tol_similarity)
+        print('\n---------------------------GEN. SUMMARY---------------------------')
+        display_mol_info(gen_iClean)
+        genClean = sort_by_energy(genClean+gen_iClean, 1)
+        genClean = genClean[:cutoff_population]
+        writeposcars(genClean, 'summary.vasp', pformat)
         print('\n---------------------------GLOBAL SUMMARY---------------------------')
-        display_mol_info(xopt_sort)
-        namesj=[imol.info['i'] for imol in xopt_sort][:nof_repeats]
-        numij=[1 for i, j in zip(namesi,namesj) if i == j]
-        count=count+1 if sum(numij) == nof_repeats else 1
+        display_mol_info(genClean)
+        namesj = [imol.info['i'] for imol in genClean][:nof_repeats]
+        numij = [1 for i, j in zip(namesi,namesj) if i == j]
+        count = count+1 if sum(numij) == nof_repeats else 1
         if count == nof_stagnant:
             print("\nEarly termination. Max repeated isomers (%d) reached at the Max stagnant cycles (%d)." %(nof_repeats, nof_stagnant))
             break
-        namesi=namesj
+        namesi = namesj
     print("\nGlobal optimization complete.")
-    return xopt_sort
+    return genClean
 #-------------------------------------------------------------------------------

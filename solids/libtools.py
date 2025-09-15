@@ -3,7 +3,7 @@ from aegon.libroulette import get_fitness
 #-------------------------------------------------------------------------------
 def display_mol_info(moleculein, flagsum=1):
     if len(moleculein)==0:
-        print("\n------------ALL MOLECULES DISCRIMINATED. GLOMOS FINISH.------------")
+        print("\n------------ALL MOLECULES DISCRIMINATED. SOLIDS FINISH.------------")
     molzz=sort_by_energy(moleculein, 1)
     for ii, imol in enumerate(molzz):
         deltae=imol.info['e'] - molzz[0].info['e']

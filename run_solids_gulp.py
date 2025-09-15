@@ -1,7 +1,7 @@
 input_text = """
 ---COMPOSITION---
-Sr   1
-Ti   1
+Mg   1
+Si   1
 O    3
 ---COMPOSITION---
 formula_units           4
@@ -38,7 +38,7 @@ nof_processes           10    #Number of parallel local opts
 calculator              GULP
 path_exe                /home/carlos0790/installdir/bin/gulp
 ---GULP---
-opti conjugate nosymmetry conp
+opti conjugate nosymmetry conv
 switch_minimiser bfgs gnorm 0.01
 vectors
 LATTICEVECTORS
@@ -47,24 +47,26 @@ COORDINATES
 space
 1
 species
-Sr 2.00
-Ti 4.00
-O -2.00
+Mg 1.8
+Si 2.4
+O -1.4
 lennard 12 6
-Sr Sr 1.0 0.0 0. 6.0
-Sr Ti 1.0 0.0 0. 6.0
-Sr O  2.0 0.0 0. 6.0
-Ti Ti 1.0 0.0 0. 6.0
-Ti O  2.0 0.0 0. 6.0
-O  O  2.0 0.0 0. 6.0
+Mg O  2.5 0.0 0.0 6.0
+Mg Si 1.5 0.0 0.0 6.0
+Si O  1.5 0.0 0.0 6.0
+Mg Mg 1.5 0.0 0.0 6.0
+Si O  1.5 0.0 0.0 6.0
+O  O  2.5 0.0 0.0 6.0
 buck
-Sr Sr 9949.1  0.2446 0.0 0. 8.0
-Sr Ti 12708.1 0.2191 0.0 0. 8.0
-Sr O  1805.2  0.3250 0.0 0. 8.0
-Ti Ti 16963.1 0.1847 0.0 0. 8.0
-Ti O  845.0   0.3770 0.0 0. 8.0
-O  O  22746.3 0.1490 0.0 0. 8.0
-maxcyc 1500
+Mg O   806.915 0.291 2.346 0.0 10.0
+Si O  1122.392 0.256 0.000 0.0 10.0
+O O    792.329 0.362 31.58 0.0 10.0
+Mg Mg  900.343 0.220 0.174 0.0 10.0
+Mg Si 1536.282 0.185 0.000 0.0 10.0
+Si Si 3516.558 0.150 0.000 0.0 10.0
+maxcyc
+800
+switch rfo cycle 350
 ---GULP---
 """
 inputfile = 'INPUT.txt'

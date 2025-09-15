@@ -18,18 +18,18 @@ tol_atomic_overlap      0.95
 
 #EVOLUTIVE PARAMETERS:
 nof_initpop             5    #Initial Population
-nof_matings             3    #Number of matings
-nof_strains             2
-nof_xchange             1
+nof_matings             5    #Number of matings
+nof_strains             3
+nof_xchange             2
 
 #NICHING PARAMETERS:
 tol_similarity          0.95 #Tol for similarity
-cutoff_energy           10.0  #Energy Cut-off
-cutoff_population       8    #Max population size
+cutoff_energy           1000.0  #Energy Cut-off
+cutoff_population       1000    #Max population size
 
 #HALT CRITERION:
-nof_generations         3    #Max generations
-nof_repeats             3    #Max repeated isomers
+nof_generations         5    #Max generations
+nof_repeats             5    #Max repeated isomers
 nof_stagnant            3    #Max stagnant cycles
 
 #THEORY LEVEL:

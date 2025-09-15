@@ -25,40 +25,48 @@ def build_mbtr(atoms_list):
 # ------------------------------------------------------------------------------------------
 def descriptor_comparison_calculated(atoms_list_in, tolerance, nproc=2):
     """
-    Compara los descriptores MBTR de una lista de estructuras y elimina aquellas
-    demasiado similares segun el umbral dado.
+    Retain only unique Atoms objects based on MBTR descriptor similarity.
+    The input list is assumed to be sorted by energy (lower index = higher priority).
     """
-    atoms_list_out = []
+    print('----------GENvsGEN----------\n')
+
     mbtr = build_mbtr(atoms_list_in)
     descriptors = mbtr.create(atoms_list_in, n_jobs=nproc)
-
+    atoms_list_out = []
+    descriptors_out = []
     disc_count = 0
-    for i in range(len(descriptors)):
-        stop_flag = False
-        for j in range(i + 1, len(descriptors)):
-            norm_i = np.linalg.norm(descriptors[i])
-            norm_j = np.linalg.norm(descriptors[j])
-            dot_product = np.dot(descriptors[i], descriptors[j])
+
+    for i, desc_i in enumerate(descriptors):
+        is_unique = True
+        for desc_j in descriptors_out:
+            norm_i = np.linalg.norm(desc_i)
+            norm_j = np.linalg.norm(desc_j)
+            dot_product = np.dot(desc_i, desc_j)
             similarity = dot_product / (norm_i * norm_j)
             if similarity >= tolerance:
-                print(f"{atoms_list_in[i].info['i']} removed, too similar to {atoms_list_in[j].info['i']}, similarity = {similarity:.5f}")
+                print(f"{atoms_list_in[i].info['i']} removed, too similar to a lower-energy structure, similarity = {similarity:.5f}")
                 disc_count += 1
-                stop_flag = True
+                is_unique = False
                 break
-        if not stop_flag:
+        if is_unique:
             atoms_list_out.append(atoms_list_in[i])
+            descriptors_out.append(desc_i)
 
-    print(f"\n{disc_count} structures removed by similarity in generation comparison\n")
+    print(f"{disc_count} structures removed by similarity in generation comparison\n")
     return atoms_list_out
 
 # ------------------------------------------------------------------------------------------
 def descriptor_comparison_calculated_vs_pool(atoms_calculated, atoms_pool, tolerance, nproc=2):
+    """Compares generation structures against the pool of known structures using MBTR similarity.
+    in:
+        atoms_calculated (list); list of Atoms objects from the current generation to be compared.
+        atoms_pool (list); list of Atoms objects from the pool of known structures.
+        tolerance (float); similarity threshold above which structures are considered too similar.
+        nproc (int); number of processors to use for descriptor calculation.
+    out:
+        different_calc (list); list of Atoms objects from atoms_calculated that are sufficiently different.
     """
-    Compara los descriptores MBTR de las estructuras recien calculadas contra un pool existente,
-    y elimina aquellas demasiado similares segun el umbral dado.
-    """
-    print('---------------- Duplicates Removal Gen vs Pool -------------------\n')
-
+    print('----------GENvsPOOL----------')
     mbtr = build_mbtr(atoms_calculated + atoms_pool)
     descr_calc = mbtr.create(atoms_calculated, n_jobs=nproc)
     descr_pool = mbtr.create(atoms_pool, n_jobs=nproc)
@@ -66,24 +74,65 @@ def descriptor_comparison_calculated_vs_pool(atoms_calculated, atoms_pool, toler
     disc_count = 0
     different_calc = []
 
-    for i in range(len(descr_calc)):
-        stop_flag = False
-        for j in range(len(descr_pool)):
-            norm_i = np.linalg.norm(descr_calc[i])
-            norm_j = np.linalg.norm(descr_pool[j])
-            dot_product = np.dot(descr_calc[i], descr_pool[j])
+    for i, desc_i in enumerate(descr_calc):
+        is_unique = True
+        for j, desc_j in enumerate(descr_pool):
+            norm_i = np.linalg.norm(desc_i)
+            norm_j = np.linalg.norm(desc_j)
+            dot_product = np.dot(desc_i, desc_j)
             similarity = dot_product / (norm_i * norm_j)
             if similarity >= tolerance:
                 print(f"{atoms_calculated[i].info['i']} removed, too similar to {atoms_pool[j].info['i']}, similarity = {similarity:.5f}")
-                stop_flag = True
                 disc_count += 1
+                is_unique = False
                 break
-        if not stop_flag:
+        if is_unique:
             different_calc.append(atoms_calculated[i])
 
     if different_calc:
-        print(f"\n{disc_count} structures removed by similarity in Gen vs Pool comparison\n")
+        print(f"\n{disc_count} structures removed by similarity in Gen vs Pool comparison")
     else:
-        print("\nZero structures removed by similarity in Gen vs Pool comparison\n")
+        print("\nZero structures removed by similarity in Gen vs Pool comparison")
 
     return different_calc
+
+
+# def descriptor_comparison_calculated_vs_pool(atoms_calculated, atoms_pool, tolerance, nproc=2):
+#     """Compares generation structures against the pool of known structures using MBTR similarity.
+#     in:
+#         atoms_calculated (list); list of Atoms objects from the current generation to be compared.
+#         atoms_pool (list); list of Atoms objects from the pool of known structures.
+#         tolerance (float); similarity threshold above which structures are considered too similar.
+#         nproc (int); number of processors to use for descriptor calculation.
+#     out:
+#         different_calc (list); list of Atoms objects from atoms_calculated that are sufficiently different.
+#     """
+#     print('----------GENvsPOOL----------\n')
+#     mbtr = build_mbtr(atoms_calculated + atoms_pool)
+#     descr_calc = mbtr.create(atoms_calculated, n_jobs=nproc)
+#     descr_pool = mbtr.create(atoms_pool, n_jobs=nproc)
+
+#     disc_count = 0
+#     different_calc = []
+
+#     for i in range(len(descr_calc)):
+#         stop_flag = False
+#         for j in range(len(descr_pool)):
+#             norm_i = np.linalg.norm(descr_calc[i])
+#             norm_j = np.linalg.norm(descr_pool[j])
+#             dot_product = np.dot(descr_calc[i], descr_pool[j])
+#             similarity = dot_product / (norm_i * norm_j)
+#             if similarity >= tolerance:
+#                 print(f"{atoms_calculated[i].info['i']} removed, too similar to {atoms_pool[j].info['i']}, similarity = {similarity:.5f}")
+#                 stop_flag = True
+#                 disc_count += 1
+#                 break
+#         if not stop_flag:
+#             different_calc.append(atoms_calculated[i])
+
+#     if different_calc:
+#         print(f"\n{disc_count} structures removed by similarity in Gen vs Pool comparison")
+#     else:
+#         print("\nZero structures removed by similarity in Gen vs Pool comparison")
+
+#     return different_calc
