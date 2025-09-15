@@ -3,7 +3,7 @@ from aegon.libutils import sort_by_energy, cutter_energy, rename
 from aegon.libposcar import writeposcars
 from aegon.libstdio import read_main_input
 from aegon.libroulette import get_roulette_wheel_selection
-from solids.libdiscmbtrcrystals import descriptor_comparison_calculated, descriptor_comparison_calculated_vs_pool
+from solids.libdiscmbtrcrystals import descriptor_comparison_calculated, descriptor_comparison_calculated_vs_pool, remove_similar_by_energy
 from solids.libtools import display_mol_info
 from solids.libmakextal import random_crystal_generator
 from solids.libcrossover import crossover
@@ -122,6 +122,7 @@ def genetic_algorithm(inputfile='INPUT.txt'):
         gen_iCutSort = sort_by_energy(gen_iCut,1)
         gen_iNich = descriptor_comparison_calculated(gen_iCutSort, tol_similarity)
         gen_iClean = descriptor_comparison_calculated_vs_pool(gen_iNich, genClean, tol_similarity)
+        gen_iClean = remove_similar_by_energy(gen_iClean, threshold=1e-3)
         print('\n---------------------------GEN. SUMMARY---------------------------')
         display_mol_info(gen_iClean)
         genClean = sort_by_energy(genClean+gen_iClean, 1)
