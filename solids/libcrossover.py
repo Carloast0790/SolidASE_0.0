@@ -5,6 +5,7 @@ from collections import Counter
 from ase import Atoms
 from ase.data import covalent_radii, atomic_numbers
 from aegon.libstdio import read_block_from_file, read_main_input
+from libtools import sorting_atoms
 #------------------------------------------------------------------------------------------------
 def uc_restriction_solids(file):
     '''Obtains the UC restrictions imposed by the user. Format a b c alpha beta gamma.
@@ -220,9 +221,7 @@ def crossover(atoms_a, atoms_b):
                 to_add_positions.append(position)
                 missing[symbol] -= 1
         atomsOut = atomsOut + Atoms(symbols=to_add_symbols, positions=to_add_positions, cell=atomsOut.get_cell())
-        atomsOutsym = atomsOut.get_chemical_symbols()
-        sorted_indices = sorted(range(len(atomsOutsym)), key=lambda i: atomsOutsym[i])
-        atomsOut = atomsOut[sorted_indices]
+        atomsOut = sorting_atoms(atomsOut)
         if Counter(atomsOut.get_chemical_symbols()) == orig_comp:
             atomsOut.pbc = True
             return atomsOut

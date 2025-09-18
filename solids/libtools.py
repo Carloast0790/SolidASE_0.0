@@ -14,3 +14,10 @@ def display_mol_info(moleculein, flagsum=1):
         else:
             print("#%s %-12s %.6f eV (%.6f eV)" %(jj, imol.info['i'], imol.info['e'], deltae))
 #-------------------------------------------------------------------------------
+def sorting_atoms(atoms_in):
+    from ase import Atoms
+    atomsOut = atoms_in.copy()
+    atomsOutsym = atomsOut.get_chemical_symbols()
+    sorted_indices = sorted(range(len(atomsOutsym)), key=lambda i: atomsOutsym[i])
+    atomsOut = atomsOut[sorted_indices]
+    return atomsOut

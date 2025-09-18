@@ -1,6 +1,7 @@
 import random
 import numpy as np
 from ase import Atoms
+from libtools import sorting_atoms
 #--------------------------------------------------------------------------------------------
 def atom_exchange(atoms_in, rounds=1):
     """Randomly swaps the positions of atoms of different species in an ASE Atoms object.
@@ -26,6 +27,7 @@ def atom_exchange(atoms_in, rounds=1):
             atoms_out[i1].position = pos2
             atoms_out[i2].position = pos1
             c = c + 1
+    atoms_out = sorting_atoms(atoms_out)
     return atoms_out
 #--------------------------------------------------------------------------------------------
 def correct_cell_vectors(cell):
@@ -97,6 +99,7 @@ def lattice_mutation(atoms_in, strain_std):
     new_cell *= scale
     atoms_out.set_cell(new_cell, scale_atoms=True)
     atoms_out = lattice_correction(atoms_out)
+    atoms_out = sorting_atoms(atoms_out)
     return atoms_out
 
 #--------------------------------------------------------------------------------------------

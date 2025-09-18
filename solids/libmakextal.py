@@ -6,6 +6,7 @@ from pyxtal.tolerance import Tol_matrix
 from pyxtal.lattice import Lattice
 from ase.data import covalent_radii, atomic_numbers
 from aegon.libstdio import read_main_input, read_block_from_file
+from libtools import sorting_atoms
 #------------------------------------------------------------------------------------------------
 def uc_restriction_pyxtal(file):
     '''Obtains the UC restrictions imposed by the user. Format a b c alpha beta gamma.
@@ -152,6 +153,7 @@ def random_crystal_generator(file):
                     sg_symbol = str(sg.symbol)
                     ase_xtal = xtal.to_ase()
                     print('random_000_'+str(xc).zfill(3)+' ---> SG_'+str(sg_symbol)+"_("+str(sym)+")")
+                    ase_xtal.sort()
                     xtalist_out.append(ase_xtal)
                     xc = xc + 1
             elif dimension == 3:
@@ -167,6 +169,7 @@ def random_crystal_generator(file):
                     sg_symbol = str(sg.symbol)
                     ase_xtal = xtal.to_ase()
                     print('random_000_'+str(xc).zfill(3)+' ---> SG_'+str(sg_symbol)+"_("+str(sym)+")")
+                    ase_xtal = sorting_atoms(ase_xtal)
                     xtalist_out.append(ase_xtal)
                     xc = xc + 1
             if number_of_xtals!= False and xc == number_of_xtals+1:
