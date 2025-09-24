@@ -145,8 +145,6 @@ def make_mutants(atoms_list_in, number_of_lattstr=1, number_of_atmxchange=1, str
                 break
     return strain_atoms_out, exchange_atoms_out
 
-
-
 # from ase.io import write, read
 # from libmakecrystals import random_crystal_generator
 # x = random_crystal_generator('INPUT.txt')

@@ -4,10 +4,11 @@ Mg   1
 Si   1
 O    3
 ---COMPOSITION---
+algorithm               stochastic
 formula_units           4
 dimension               3
-symmetries             16-74
-fixed_lattice          2.474 8.121 6.138 90.0 90.0 90.0
+symmetries              16-74
+fixed_lattice           2.474 8.121 6.138 90.0 90.0 90.0
 #custom_tolerances      Ti,Ti,1.2 Ti,O,1.3 O,O,1.2
 #---TOLERANCES---
 #Au Au 1.2
@@ -17,25 +18,19 @@ fixed_lattice          2.474 8.121 6.138 90.0 90.0 90.0
 volume_factor           1.0
 tol_atomic_overlap      0.95
 
-#EVOLUTIVE PARAMETERS:
-nof_initpop             10    #Initial Population
-nof_matings             5     #Number of matings
-nof_strains             5
-nof_xchange             5
+#ALGORITHM PARAMETERS:
+nof_initpop             30    #Initial Population
 
 #NICHING PARAMETERS:
-tol_similarity          0.95  #Tol for similarity
+tol_similarity          0.95 #Tol for similarity
 cutoff_energy           10.0  #Energy Cut-off
-cutoff_population       8     #Max population size
 
 #HALT CRITERION:
-nof_generations         3    #Max generations
-nof_repeats             5     #Max repeated isomers
-nof_stagnant            5     #Max stagnant cycles
+nof_stages              3    #No. of Optimization Stages
 
 #THEORY LEVEL:
-nof_processes           10    #Number of parallel local opts
 calculator              GULP
+nof_processes           10    #Number of parallel local opts
 path_exe                /home/carlos0790/installdir/bin/gulp
 ---GULP---
 opti conjugate nosymmetry conv
@@ -72,5 +67,5 @@ switch rfo cycle 350
 inputfile = 'INPUT.txt'
 with open(inputfile, "w") as f: f.write(input_text)
 if __name__ == "__main__":
-    from solids.heuristic  import genetic_algorithm
-    xopt_sort=genetic_algorithm(inputfile)
+    from solids.heuristicComp  import mainAlgorithm
+    xopt_sort=mainAlgorithm(inputfile)
