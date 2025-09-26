@@ -61,7 +61,7 @@ def mainAlgorithm(inputfile='INPUT.txt'):
         print('Theory Level            = %s'    %(calculator))
         #Main Algorithm
         print('---------------------------GENERATION 0---------------------------')
-        print('Construction of the guest population (nof_initpop=%d)\n' %(nof_initpop))
+        print('Construction of the initial population (nof_initpop=%d)\n' %(nof_initpop))
         gen0Rand = random_crystal_generator(inputfile)
         rename(gen0Rand, 'random_'+str(0).zfill(ndigit1), ndigit2)
         print('\nOptimization at %s:' %(calculator))

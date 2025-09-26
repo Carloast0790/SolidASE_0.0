@@ -71,22 +71,19 @@ def interatom_restriction_solids(file):
     if os.path.isfile(file):
         try:
             x = read_block_from_file(file, 'TOLERANCES')
-            if not x:
-                df = read_main_input(file)
-                df_comp = df.get_comp(key='COMPOSITION')
-                atms_specie = [k[0] for k in df_comp.comp]
-                tolerance_percent = df.get_float(key='tol_atomic_overlap', default=0.95)
-                solids_tolerances = get_percent_tolerances_solids(atms_specie, tolerance_percent)
-            else:
-                solids_tolerances = []
-                for i in x:
-                    part = i.strip().split()
-                    if len(part) >= 3:
-                        s1, s2, dist = part[0], part[1], float(part[2])
-                        solids_tolerances.append(s1, s2, dist)
-        except Exception as e:
-            print(f"Error reading tolerances: {e}")
-            return None
+        except:
+            df = read_main_input(file)
+            df_comp = df.get_comp(key='COMPOSITION')
+            atms_specie = [k[0] for k in df_comp.comp]
+            tolerance_percent = df.get_float(key='tol_atomic_overlap', default=0.95)
+            solids_tolerances = get_percent_tolerances_solids(atms_specie, tolerance_percent)
+        else:
+            solids_tolerances = []
+            for i in x:
+                part = i.strip().split()
+                if len(part) >= 3:
+                    s1, s2, dist = part[0], part[1], float(part[2])
+                    solids_tolerances.append((s1, s2, dist))
     return solids_tolerances
 
 #--------------------------------------------------------------------------------------------
