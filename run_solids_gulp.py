@@ -24,21 +24,21 @@ nof_initpop             10    #Initial Population
 nof_matings             20    #No. of matings
 nof_strains             5     #No. of strains
 nof_xchange             5     #No. of atom exchanges
-nof_generations         10    #No. of generations
 
 #NICHING PARAMETERS:
 tol_similarity          0.95 #Tol for similarity
 cutoff_energy           10.0  #Energy Cut-off
 
 #HALT CRITERION:
-nof_stages              3    #No. of Optimization Stages
+nof_stages              3     #No. of Optimization Stages
 nof_repeats             5     #No. of repeats
 nof_stagnant            3     #No. of stagnant generations
+nof_generations         10    #No. of generations
 
 #THEORY LEVEL:
 calculator              GULP
 nof_processes           10    #Number of parallel local opts
-path_exe                /home/carlos0790/installdir/bin/gulp
+path_exe                /home/fili/installdir/bin/gulp
 
 ---GULP---
 opti conj conp

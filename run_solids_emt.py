@@ -8,16 +8,16 @@ dimension            3
 algorithm            stochastich
 #symmetries          16-74
 #fixed_lattice       2.474 8.121 6.138 90.0 90.0 90.0
----TOLERANCES---
-Au Au 2.8
-Ag Ag 2.8
-Au Ag 2.7
----TOLERANCES---
+#---TOLERANCES---
+#Au Au 2.8
+#Ag Ag 2.8
+#Au Ag 2.7
+#---TOLERANCES---
 volume_factor           1.0
-# tol_atomic_overlap      0.95
+tol_atomic_overlap      0.95
 
 #ALGORITHM PARAMETERS:
-nof_initpop             2    #Initial Population
+nof_initpop             30    #Initial Population
 
 #NICHING PARAMETERS:
 tol_similarity          0.95 #Tol for similarity
