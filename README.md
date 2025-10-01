@@ -8,3 +8,5 @@ Solids relies in two separated schemes: The Stochastich Algorithm and the Evolut
 The Stochastich Algorithm builts and relaxes a set of Point-Group-Based structues in order to preliminarily explore the energy landscape of cystalline structures. The advantage of this process is that is based on stages where the level of theory can be refined after each stage.
 
 The Evolutive Algorithm improves on the Stochastic one by transmiting the already-available good structural traits to new generations using Crossover and Mutation operators. Each set of crossovers and mutants are relaxed and, in turn, pass on their characteristics to new candidates, untill halting criteria is met. 
+
+In version 0.0 Solids is interfaced with ESM optimization by ASE, GULP and VASP.
