@@ -1,10 +1,9 @@
 input_text = """
 ---COMPOSITION---
-Ti   1
-O    2
+C  8
 ---COMPOSITION---
 algorithm               evolutive
-formula_units           4
+formula_units           1
 dimension               3
 # symmetries              16-74
 # fixed_lattice           2.474 8.121 6.138 90.0 90.0 90.0
@@ -42,23 +41,35 @@ path_exe                /home/carlos0790/installdir/bin/gulp
 
 ---GULP---
 opti conj conp
-switch_minimiser bfgs gnorm 0.5
+switch_minimiser bfgs gnorm 0.01
 vectors
 LATTICEVECTORS
 frac
 COORDINATES
-species
-Ti  2.196
-O  -1.098
-buck
-Ti Ti 31120.1 0.1540 5.25  15
-O  O  11782.7 0.2340 30.22 15
-Ti O  16957.5 0.1940 12.59 15
-lennard 12 6
-Ti Ti   1   0 15
-O  O    1   0 15
-Ti O    1   0 15
+lib /home/carlos0790/installdir/Gulp/Libraries/meam_2nn.lib
+maxcyc 950
 ---GULP---
+
+
+#---GULP---
+#opti conj conp
+#switch_minimiser bfgs gnorm 0.5
+#vectors
+#LATTICEVECTORS
+#frac
+#COORDINATES
+#species
+#Ti  2.196
+#O  -1.098
+#buck
+#Ti Ti 31120.1 0.1540 5.25  15
+#O  O  11782.7 0.2340 30.22 15
+#Ti O  16957.5 0.1940 12.59 15
+#lennard 12 6
+#Ti Ti   1   0 15
+#O  O    1   0 15
+#Ti O    1   0 15
+#---GULP---
 
 # ---GULP---
 # opti conjugate nosymmetry conp
