@@ -1,30 +1,33 @@
 input_text = """
 ---COMPOSITION---
-Au 2
-Ag 2
+Au 8
 ---COMPOSITION---
-formula_units        2
+formula_units        1
 dimension            3
-algorithm            stochastich
-#symmetries          16-74
-#fixed_lattice       2.474 8.121 6.138 90.0 90.0 90.0
-#---TOLERANCES---
-#Au Au 2.8
-#Ag Ag 2.8
-#Au Ag 2.7
-#---TOLERANCES---
-volume_factor           1.0
-tol_atomic_overlap      0.95
+volume_factor        1.0
+tol_atomic_overlap   0.95
 
 #ALGORITHM PARAMETERS:
-nof_initpop             30    #Initial Population
+algorithm            evolutive
+nof_initpop          30
+
+#Evolutive:
+nof_matings          20    #No. of matings
+nof_strains          5     #No. of strains
+nof_xchange          5     #No. of atom exchanges
 
 #NICHING PARAMETERS:
-tol_similarity          0.95 #Tol for similarity
-cutoff_energy           10.0  #Energy Cut-off
+tol_similarity       0.95 #Tol for similarity
+cutoff_energy        10.0  #Energy Cut-off
 
 #HALT CRITERION:
+#Stochastic:
 nof_stages              3    #No. of Optimization Stages
+
+#Evolutive:
+nof_repeats             5     #No. of repeats
+nof_stagnant            3     #No. of stagnant generations
+nof_generations         10    #No. of generations
 
 #THEORY LEVEL:
 calculator              EMT
