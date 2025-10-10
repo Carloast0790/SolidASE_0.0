@@ -28,6 +28,7 @@ def mainAlgorithm(inputfile='INPUT.txt'):
 	cutoff_energy=df.get_float(key='cutoff_energy', default=5.0)
 	cutoff_population=df.get_int(key='cutoff_population', default=8)
 	calculator=df.get_str(key='calculator', default='ANI1ccx')
+	nof_parcalcs=df.get_int(key='nof_parcalcs', default=2)	
 	#Parameters for genetic algorithm
 	nof_matings=df.get_int(key='nof_matings', default=5)
 	nof_strains=df.get_int(key='nof_strains', default=5)
@@ -69,15 +70,16 @@ def mainAlgorithm(inputfile='INPUT.txt'):
 			cd = code(gen0Rand)
 			gen0Opt = cd.set_EMT()
 		elif calculator=='GULP':
-			cd=code(gen0Rand)
+			cd = code(gen0Rand)
 			block_gulp = df.get_block(key='GULP')
 			path_exe = df.get_str(key='path_exe', default=None)
 			gen0Opt = cd.set_GULP(block_gulp=block_gulp, gulp_path=path_exe, nproc=nof_processes, base_name='stage')
 			os.system('rm -rf stageproc*')
 		elif calculator=='VASP':
-			cd=code(gen0Rand)
+			cd = code(gen0Rand)
 			block_vasp = df.get_block(key='VASP')
 			gen0Opt = cd.set_VASP(block_vasp=block_vasp, NparCalcs=nof_parcalcs, base_name='gen'+str(0).zfill(ndigit1))
+			os.system('rm -rf gen000_0*')
 
 		print('\n---------------------------Niching---------------------------\n')
 		print('Max population size=%d; Energy Cut-off=%.2f; Tolerance for similarity=%4.2f\n' %(cutoff_population,cutoff_energy,tol_similarity))
@@ -89,6 +91,7 @@ def mainAlgorithm(inputfile='INPUT.txt'):
 		display_mol_info(genClean)
 		namesi=[imol.info['i'] for imol in genClean][:nof_repeats]
 		count=0
+		writeposcars(genClean, 'summary.vasp', pformat)
 		for igen in range(nof_generations):
 			print("\n---------------------------GENERATION %d---------------------------\n" %(igen+1))
 			print('Construction of crossovers ...\n')
@@ -116,18 +119,18 @@ def mainAlgorithm(inputfile='INPUT.txt'):
 			gen_i = cross_atoms + strain_atoms + exchange_atoms
 			print('\nOptimization at %s:' %(calculator))
 			if calculator=='EMT':
-				cd=code(gen_i)
-				gen_iOpt=cd.set_EMT()
+				cd = code(gen_i)
+				gen_iOpt = cd.set_EMT()
 			elif calculator=='GULP':
-				cd=code(gen_i)
+				cd = code(gen_i)
 				block_gulp=df.get_block(key='GULP')
 				path_exe=df.get_str(key='path_exe', default=None)
-				gen_iOpt=cd.set_GULP(block_gulp=block_gulp, gulp_path=path_exe, nproc=nof_processes, base_name='stage')
+				gen_iOpt = cd.set_GULP(block_gulp=block_gulp, gulp_path=path_exe, nproc=nof_processes, base_name='stage')
 				os.system('rm -rf stageproc*')
 			elif calculator=='VASP':
-				cd=code(gen0Rand)
+				cd = code(gen_i)
 				block_vasp = df.get_block(key='VASP')
-				gen0Opt = cd.set_VASP(block_vasp=block_vasp, NparCalcs=nof_parcalcs, base_name='gen'+str(0).zfill(ndigit1))
+				gen_iOpt = cd.set_VASP(block_vasp=block_vasp, NparCalcs=nof_parcalcs, base_name='gen'+str(0).zfill(ndigit1))
 			print('\n---------------------------NICHING---------------------------')
 			print('Max population size=%d; Energy Cut-off=%.2f; Tol for similarity=%4.2f\n' %(cutoff_population,cutoff_energy,tol_similarity))
 			gen_iCut = cutter_energy(gen_iOpt, cutoff_energy)
