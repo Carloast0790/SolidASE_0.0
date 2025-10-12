@@ -1,6 +1,6 @@
 input_text = """
 ---COMPOSITION---
-Au 8
+Au 8    
 ---COMPOSITION---
 formula_units        1
 dimension            3
