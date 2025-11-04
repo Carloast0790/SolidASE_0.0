@@ -5,7 +5,7 @@ from collections import Counter
 from ase import Atoms
 from ase.data import covalent_radii, atomic_numbers
 from aegon.libstdio import read_block_from_file, read_main_input
-from libtools import sorting_atoms
+from solids.libtools import sorting_atoms
 #------------------------------------------------------------------------------------------------
 def uc_restriction_solids(file):
     '''Obtains the UC restrictions imposed by the user. Format a b c alpha beta gamma.

@@ -1,44 +1,43 @@
 input_text = """
 ---COMPOSITION---
-C  8
+Si   1
+O    2
 ---COMPOSITION---
-algorithm               evolutive
-formula_units           1
+formula_units           4
 dimension               3
-# symmetries              16-74
-# fixed_lattice           2.474 8.121 6.138 90.0 90.0 90.0
-# ---TOLERANCES---
-# Mg Mg 2.4
-# Mg Si 2.4
-# Mg O  1.75
-# Si Si 2.4
-# Si O  1.6
-# O  O  2.4
-# ---TOLERANCES---
 volume_factor           1.0
 tol_atomic_overlap      0.95
 
 #ALGORITHM PARAMETERS:
+algorithm               evolutive
 nof_initpop             10    #Initial Population
+
+#Evolutive
 nof_matings             20    #No. of matings
 nof_strains             5     #No. of strains
 nof_xchange             5     #No. of atom exchanges
 
 #NICHING PARAMETERS:
-tol_similarity          0.95 #Tol for similarity
+tol_similarity          0.95  #Tol for similarity
 cutoff_energy           10.0  #Energy Cut-off
+cutoff_population       10    #Number of final candidates
 
 #HALT CRITERION:
-nof_stages              3     #No. of Optimization Stages
-nof_repeats             5     #No. of repeats
-nof_stagnant            3     #No. of stagnant generations
-nof_generations         10    #No. of generations
+#Stochastic:
+nof_stages              2     #Number of Optimization Stages when using the Stochastich algorithm
+
+#Evolutive:
+nof_repeats             3     #Breaks the process if the same structures are repeated 5 times
+nof_stagnant            2     #If the best 3 solutions are iteratively located, the process stops
+nof_generations         2     #Number of generations
 
 #THEORY LEVEL:
 calculator              GULP
 nof_processes           10    #Number of parallel local opts
-path_exe                /home/fili/installdir/bin/gulp
+path_exe                /home/carlos0790/installdir/bin/gulp
 
+#lib /home/carlos0790/installdir/Gulp/Libraries/matsui-akaogi.lib
+#maxcyc 950
 ---GULP---
 opti conj conp
 switch_minimiser bfgs gnorm 0.01
@@ -46,30 +45,11 @@ vectors
 LATTICEVECTORS
 frac
 COORDINATES
-lib /home/carlos0790/installdir/Gulp/Libraries/meam_2nn.lib
-maxcyc 950
+lib /home/carlos0790/installdir/Gulp/Libraries/tsuneyuki.lib
 ---GULP---
 
-
-#---GULP---
-#opti conj conp
-#switch_minimiser bfgs gnorm 0.5
-#vectors
-#LATTICEVECTORS
-#frac
-#COORDINATES
-#species
-#Ti  2.196
-#O  -1.098
-#buck
-#Ti Ti 31120.1 0.1540 5.25  15
-#O  O  11782.7 0.2340 30.22 15
-#Ti O  16957.5 0.1940 12.59 15
-#lennard 12 6
-#Ti Ti   1   0 15
-#O  O    1   0 15
-#Ti O    1   0 15
-#---GULP---
+# Parameters for local optimizations with different potentials
+# MgAl2O4 100GPa
 
 # ---GULP---
 # opti conjugate nosymmetry conp
@@ -99,6 +79,9 @@ maxcyc 950
 # maxcyc 850
 # switch rfo 0.010
 # ---GULP---
+
+#MgSiO3
+
 # ---GULP---
 # opti conjugate nosymmetry conv
 # switch_minimiser bfgs gnorm 0.01

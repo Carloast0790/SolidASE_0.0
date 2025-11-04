@@ -1,38 +1,40 @@
 input_text = """
 ---COMPOSITION---
-Au 8    
+Al 10
 ---COMPOSITION---
-formula_units        1
-dimension            3
-volume_factor        1.0
-tol_atomic_overlap   0.95
+formula_units        1          #The number of atoms in composition are multiplied by this number
+dimension            3          #Solids can handle 2- and 3-dimensional crystals
+volume_factor        1.0        #The volume factor of the unit cell
+tol_atomic_overlap   0.95       #The minimum distance between atoms is 95% the sum of their radii
 
 #ALGORITHM PARAMETERS:
-algorithm            evolutive
-nof_initpop          30
+algorithm            evolutive  #stochastic -> Stochastic algorithm, evolutive-> Evolutive Algorithm
+nof_initpop          10         #Size of the initial population of crystals
 
 #Evolutive:
-nof_matings          20    #No. of matings
-nof_strains          5     #No. of strains
-nof_xchange          5     #No. of atom exchanges
+nof_matings          20         #Number of matings
+nof_strains          5          #Number of strains
+nof_xchange          0          #Number of atom exchanges
 
 #NICHING PARAMETERS:
-tol_similarity       0.95 #Tol for similarity
-cutoff_energy        10.0  #Energy Cut-off
+tol_similarity       0.98       #Tol for similarity
+cutoff_energy        5.0        #Energy Cut-off
+cutoff_population    10         #Number of final candidates
 
 #HALT CRITERION:
 #Stochastic:
-nof_stages              3    #No. of Optimization Stages
+nof_stages              2       #Number of Optimization Stages when using the Stochastich algorithm
 
 #Evolutive:
-nof_repeats             5     #No. of repeats
-nof_stagnant            3     #No. of stagnant generations
-nof_generations         10    #No. of generations
+nof_repeats             10       #Breaks the process if the same structures are repeated 5 times
+nof_stagnant            5       #If the best 3 solutions are iteratively located, the process stops
+nof_generations         10       #Number of generations
 
 #THEORY LEVEL:
-calculator              EMT
-nof_processes           5    #Number of parallel local opts
+calculator              EMT     #Available calculators: EMT, VASP, GULP
+nof_processes           10       #Number of parallel local opts
 """
+#Execution of main code
 inputfile = 'INPUT.txt'
 with open(inputfile, "w") as f: f.write(input_text)
 if __name__ == "__main__":

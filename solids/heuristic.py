@@ -196,6 +196,7 @@ def mainAlgorithm(inputfile='INPUT.txt'):
 			gen0Cut = cutter_energy(gen0Opt, cutoff_energy)
 			gen0CutSort = sort_by_energy(gen0Cut, 1)
 			gen0Nich = descriptor_comparison_calculated(gen0CutSort, tol_similarity)
+			gen0Nich = remove_similar_by_energy(gen0Nich, threshold=1e-3)
 			genClean = gen0Nich[:cutoff_population]
 			print('\n---------------------------STAGE %d SUMMARY---------------------------\n'%(stage+1))
 			display_mol_info(genClean, pformat)
