@@ -1,7 +1,7 @@
 import random
 import numpy as np
 from ase import Atoms
-from solids.libtools import sorting_atoms
+from libtools import sorting_atoms
 #--------------------------------------------------------------------------------------------
 def atom_exchange(atoms_in, rounds=1):
     """Randomly swaps the positions of atoms of different species in an ASE Atoms object.
