@@ -9,4 +9,4 @@ The Stochastich Algorithm builts and relaxes a set of Point-Group-Based structue
 
 The Evolutive Algorithm improves on the Stochastic one by transmiting the already-available good structural traits to new generations using Crossover and Mutation operators. Each set of crossovers and mutants are relaxed and, in turn, pass on their characteristics to new candidates, untill halting criteria is met. 
 
-In version 0.0 Solids is interfaced with ESM optimization by ASE, GULP and VASP.
+In version 1.0 Solids is interfaced with ESM optimization by ASE, GULP and VASP.

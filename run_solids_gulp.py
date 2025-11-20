@@ -18,7 +18,7 @@ nof_strains             5     #No. of strains
 nof_xchange             5     #No. of atom exchanges
 
 #NICHING PARAMETERS:
-tol_similarity          0.95  #Tol for similarity
+tol_similarity          0.97  #Tol for similarity
 cutoff_energy           10.0  #Energy Cut-off
 cutoff_population       10    #Number of final candidates
 
@@ -36,8 +36,6 @@ calculator              GULP
 nof_processes           10    #Number of parallel local opts
 path_exe                /home/carlos0790/installdir/bin/gulp
 
-#lib /home/carlos0790/installdir/Gulp/Libraries/matsui-akaogi.lib
-#maxcyc 950
 ---GULP---
 opti conj conp
 switch_minimiser bfgs gnorm 0.01
