@@ -1,6 +1,5 @@
 import numpy as np
 from dscribe.descriptors import MBTR
-
 # ------------------------------------------------------------------------------------------
 def build_mbtr(atoms_list):
     """This function builds an MBTR descriptor object configured for a set of structures.
@@ -9,7 +8,6 @@ def build_mbtr(atoms_list):
     out: 
         mbtr (MBTR object); configured MBTR descriptor.
     """
-    # Especies presentes en todas las estructuras de entrada
     species = sorted(set(
         sym for atoms in atoms_list for sym in atoms.get_chemical_symbols()
     ))
@@ -20,7 +18,8 @@ def build_mbtr(atoms_list):
         weighting={"function": "inverse_square", "r_cut": 10, "threshold": 1e-3},
         grid={"min": 0, "max": 10, "sigma": 1e-3, "n": 100},
         periodic=True,
-        normalization="none",
+        # normalization="none",
+        normalization="l2",
         sparse=False,
         dtype="float64",
     )
@@ -47,10 +46,11 @@ def descriptor_comparison_calculated(atoms_list_in, tolerance, nproc=2):
     for i, desc_i in enumerate(descriptors):
         is_unique = True
         for desc_j in descriptors_out:
-            norm_i = np.linalg.norm(desc_i)
-            norm_j = np.linalg.norm(desc_j)
-            dot_product = np.dot(desc_i, desc_j)
-            similarity = dot_product / (norm_i * norm_j)
+            # Use L1-based similarity as provided:
+            # S_ij = 1 / (1 + (1/d) * sum_l |X_i^l - X_j^l|)
+            d = desc_i.size
+            l1 = np.sum(np.abs(desc_i - desc_j))
+            similarity = 1.0 / (1.0 + (1.0 / d) * l1)
             if similarity >= tolerance:
                 print(f"{atoms_list_in[i].info['i']} removed, too similar to a lower-energy structure, similarity = {similarity:.5f}")
                 disc_count += 1
@@ -83,10 +83,9 @@ def descriptor_comparison_calculated_vs_pool(atoms_calculated, atoms_pool, toler
     for i, desc_i in enumerate(descr_calc):
         is_unique = True
         for j, desc_j in enumerate(descr_pool):
-            norm_i = np.linalg.norm(desc_i)
-            norm_j = np.linalg.norm(desc_j)
-            dot_product = np.dot(desc_i, desc_j)
-            similarity = dot_product / (norm_i * norm_j)
+            d = desc_i.size
+            l1 = np.sum(np.abs(desc_i - desc_j))
+            similarity = 1.0 / (1.0 + (1.0 / d) * l1)
             if similarity >= tolerance:
                 print(f"{atoms_calculated[i].info['i']} removed, too similar to {atoms_pool[j].info['i']}, similarity = {similarity:.5f}")
                 disc_count += 1
