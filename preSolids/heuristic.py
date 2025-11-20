@@ -2,7 +2,7 @@ import os
 from aegon.libutils import sort_by_energy, cutter_energy, rename
 from aegon.libposcar import writeposcars
 from aegon.libstdio import read_main_input
-from aegon.libsel_roulette import get_roulette_wheel_selection
+from aegon.libroulette import get_roulette_wheel_selection
 from solids.libdiscmbtrcrystals import descriptor_comparison_calculated, descriptor_comparison_calculated_vs_pool, remove_similar_by_energy
 from solids.libtools import display_mol_info
 from solids.libmakextal import random_crystal_generator
@@ -187,7 +187,7 @@ def mainAlgorithm(inputfile='INPUT.txt'):
 				gen0Opt = cd.set_GULP(block_gulp=block_gulp, gulp_path=path_exe, nproc=nof_processes, base_name='stage')
 				os.system('rm -rf stageproc*')
 			elif calculator=='VASP':
-				cd=code(genClean)
+				cd=code(gen0Rand)
 				block_vasp = df.get_block(key='VASP')
 				gen0Opt = cd.set_VASP(block_vasp=block_vasp, NparCalcs=nof_parcalcs, base_name='gen'+str(0).zfill(ndigit1))
 				os.system('rm -rf gen000_0*')
@@ -196,6 +196,7 @@ def mainAlgorithm(inputfile='INPUT.txt'):
 			gen0Cut = cutter_energy(gen0Opt, cutoff_energy)
 			gen0CutSort = sort_by_energy(gen0Cut, 1)
 			gen0Nich = descriptor_comparison_calculated(gen0CutSort, tol_similarity)
+			gen0Nich = remove_similar_by_energy(gen0Nich, threshold=1e-3)
 			genClean = gen0Nich[:cutoff_population]
 			print('\n---------------------------STAGE %d SUMMARY---------------------------\n'%(stage+1))
 			display_mol_info(genClean, pformat)

@@ -1,0 +1,9 @@
+---COMPOSITION---
+Ti 1
+O  2
+---COMPOSITION---
+formula_units        10
+dimension            3
+volume_factor        1.0
+tol_atomic_overlap   0.95
+nof_initpop          10

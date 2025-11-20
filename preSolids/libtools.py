@@ -1,5 +1,5 @@
 from aegon.libutils import sort_by_energy
-from aegon.libsel_roulette import get_fitness
+from aegon.libroulette import get_fitness
 #-------------------------------------------------------------------------------
 def display_mol_info(moleculein, flagsum=1):
     if len(moleculein)==0:

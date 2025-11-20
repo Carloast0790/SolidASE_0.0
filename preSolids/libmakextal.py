@@ -6,7 +6,7 @@ from pyxtal.tolerance import Tol_matrix
 from pyxtal.lattice import Lattice
 from ase.data import covalent_radii, atomic_numbers
 from aegon.libstdio import read_main_input, read_block_from_file
-from solids.libtools import sorting_atoms
+from libtools import sorting_atoms
 #------------------------------------------------------------------------------------------------
 def uc_restriction_pyxtal(file):
     '''Obtains the UC restrictions imposed by the user. Format a b c alpha beta gamma.
@@ -132,7 +132,7 @@ def random_crystal_generator(file):
     vol_factor = df.get_float('volume_factor',1.0)
     revisit_syms = df.get_int('revisit_syms',1)
     tol_atomic_overlap = df.get_float('tol_atomic_overlap',0.97)
-    number_of_xtals = df.get_int('nof_initpop', False)
+    number_of_xtals = df.get_int('nof_initpop',False)
     sym_list = get_symmetry_constrains(file,'symmetries', dimension)
     uc_rest = uc_restriction_pyxtal(file)
     pyxtal_mtx_tolerance = interatom_restriction_pyxtal(file)

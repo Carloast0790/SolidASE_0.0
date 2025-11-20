@@ -1,5 +1,6 @@
 import numpy as np
 from dscribe.descriptors import MBTR
+
 # ------------------------------------------------------------------------------------------
 def build_mbtr(atoms_list):
     """This function builds an MBTR descriptor object configured for a set of structures.
@@ -8,6 +9,7 @@ def build_mbtr(atoms_list):
     out: 
         mbtr (MBTR object); configured MBTR descriptor.
     """
+    # Especies presentes en todas las estructuras de entrada
     species = sorted(set(
         sym for atoms in atoms_list for sym in atoms.get_chemical_symbols()
     ))
@@ -62,6 +64,46 @@ def descriptor_comparison_calculated(atoms_list_in, tolerance, nproc=2):
 
     print(f"{disc_count} structures removed by similarity in generation comparison\n")
     return atoms_list_out
+
+# def descriptor_comparison_calculated(atoms_list_in, tolerance, nproc=2):
+#     """This function compares a list of Atoms objects against each other using MBTR similarity.
+#     It retains only those that are sufficiently different based on a similarity threshold.
+#     in:
+#         atoms_list_in (list); list of Atoms objects to compare.
+#         tolerance (float); similarity threshold above which structures are considered too similar.
+#         nproc (int); number of processors to use for descriptor calculation.
+#     out:
+#         atoms_list_out (list); list of Atoms objects from atoms_list_in that are sufficiently different.
+#     """
+#     print('----------GENvsGEN----------\n')
+#     mbtr = build_mbtr(atoms_list_in)
+#     descriptors = mbtr.create(atoms_list_in, n_jobs=nproc)
+#     atoms_list_out = []
+#     descriptors_out = []
+#     disc_count = 0
+#     lenght_des = len(descriptors)
+#     for i in range(length_des):
+#         for j in range(i+1, lenght_des):
+
+        
+#     for i, desc_i in enumerate(descriptors):
+#         is_unique = True
+#         for desc_j in descriptors_out:
+#             norm_i = np.linalg.norm(desc_i)
+#             norm_j = np.linalg.norm(desc_j)
+#             dot_product = np.dot(desc_i, desc_j)
+#             similarity = dot_product / (norm_i * norm_j)
+#             if similarity >= tolerance:
+#                 print(f"{atoms_list_in[i].info['i']} removed, too similar to a lower-energy structure, similarity = {similarity:.5f}")
+#                 disc_count += 1
+#                 is_unique = False
+#                 break
+#         if is_unique:
+#             atoms_list_out.append(atoms_list_in[i])
+#             descriptors_out.append(desc_i)
+
+#     print(f"{disc_count} structures removed by similarity in generation comparison\n")
+#     return atoms_list_out
 
 # ------------------------------------------------------------------------------------------
 def descriptor_comparison_calculated_vs_pool(atoms_calculated, atoms_pool, tolerance, nproc=2):
