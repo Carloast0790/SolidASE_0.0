@@ -13,12 +13,12 @@ nof_initpop          10         #Size of the initial population of crystals
 
 #Evolutive:
 nof_matings          20         #Number of matings
-nof_strains          5          #Number of strains
+nof_strains          6          #Number of strains
 nof_xchange          0          #Number of atom exchanges
 
 #NICHING PARAMETERS:
-tol_similarity       0.98       #Tol for similarity
-cutoff_energy        5.0        #Energy Cut-off
+tol_similarity       0.96       #Tol for similarity
+cutoff_energy        2.0        #Energy Cut-off
 cutoff_population    10         #Number of final candidates
 
 #HALT CRITERION:
@@ -28,7 +28,7 @@ nof_stages              2       #Number of Optimization Stages when using the St
 #Evolutive:
 nof_repeats             10       #Breaks the process if the same structures are repeated 5 times
 nof_stagnant            5       #If the best 3 solutions are iteratively located, the process stops
-nof_generations         10       #Number of generations
+nof_generations         30       #Number of generations
 
 #THEORY LEVEL:
 calculator              EMT     #Available calculators: EMT, VASP, GULP
